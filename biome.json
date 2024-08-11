@@ -1,0 +1,32 @@
+{
+	"$schema": "https://biomejs.dev/schemas/1.8.3/schema.json",
+	"organizeImports": {
+		"enabled": true
+	},
+	"linter": {
+		"enabled": true,
+		"rules": {
+			"recommended": true,
+			"correctness": {
+				"noUnusedImports": "error"
+			},
+			"nursery": {
+				"useSortedClasses": "error"
+			},
+			"style": {
+				"noParameterAssign": "info"
+			},
+			"complexity": {
+				"noBannedTypes": "info"
+			}
+		}
+	},
+	"files": {
+		"ignore": ["package.json"]
+	},
+	"vcs": {
+		"enabled": true,
+		"useIgnoreFile": true,
+		"clientKind": "git"
+	}
+}
