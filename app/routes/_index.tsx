@@ -1,4 +1,7 @@
-import type { MetaFunction } from "@remix-run/cloudflare";
+import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/cloudflare";
+import { Form, json, useLoaderData } from "@remix-run/react";
+import i18next from "~/.server/i18next";
+import { useTranslation } from "~/i18n";
 
 export const meta: MetaFunction = () => {
 	return [
@@ -10,32 +13,38 @@ export const meta: MetaFunction = () => {
 	];
 };
 
+export async function loader({ request }: LoaderFunctionArgs) {
+	const t = await i18next.getFixedT(request, "common");
+	const greeting = t("greeting");
+	return json({ greeting });
+}
+
 export default function Index() {
+	const { t } = useTranslation("common");
+	const { greeting } = useLoaderData<typeof loader>();
+
 	return (
-		<div className="p-4 font-sans">
-			<h1 className="text-3xl">Welcome to Remix on Cloudflare</h1>
-			<ul className="mt-4 list-disc space-y-2 pl-6">
-				<li>
-					<a
-						className="text-blue-700 underline visited:text-purple-900"
-						target="_blank"
-						href="https://remix.run/docs"
-						rel="noreferrer"
-					>
-						Remix Docs
-					</a>
-				</li>
-				<li>
-					<a
-						className="text-blue-700 underline visited:text-purple-900"
-						target="_blank"
-						href="https://developers.cloudflare.com/pages/framework-guides/deploy-a-remix-site/"
-						rel="noreferrer"
-					>
-						Cloudflare Pages Docs - Remix guide
-					</a>
-				</li>
-			</ul>
-		</div>
+		<Form className="flex flex-col gap-2 p-4 font-sans">
+			<h1 className="text-3xl">{t("welcome")}</h1>
+			<div className="flex gap-2">
+				<button
+					className="bg-black px-4 py-1 text-white hover:opacity-80"
+					name="lng"
+					value="en"
+					type="submit"
+				>
+					English
+				</button>
+				<button
+					className="bg-black px-4 py-1 text-white hover:opacity-80"
+					name="lng"
+					value="ja"
+					type="submit"
+				>
+					日本語
+				</button>
+			</div>
+			<p>{greeting}</p>
+		</Form>
 	);
 }
